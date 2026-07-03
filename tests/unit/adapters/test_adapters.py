@@ -2,7 +2,8 @@ import builtins
 from typing import Any
 
 import pytest
-from src.hyperadmin.core.adapters import BaseAdapter
+
+from hyperadmin.core.adapters import BaseAdapter
 
 
 def test_base_adapter_is_abstract():
