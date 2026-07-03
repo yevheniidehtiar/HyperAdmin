@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 _NUMPY_MIN_N = 64
 
 try:  # pragma: no cover - exercised indirectly via both code paths in tests
-    import numpy as _np
+    import numpy as _np  # pyright: ignore[reportMissingImports]
 
     _HAS_NUMPY = True
 except ImportError:  # pragma: no cover - numpy is a dev dep; fallback is still tested
