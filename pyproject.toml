@@ -13,7 +13,6 @@ authors = [
 license = { text = "MIT" }
 requires-python = ">=3.10,<4.0"
 dependencies = [
-  "appnope>=0.1.3",
   "fastapi[standard]>=0.116.0",
   "fastapi-storages>=0.1.0",
   "pydantic>=2.7; python_version < '3.13'",
@@ -42,20 +41,17 @@ hyperadmin = "hyperadmin.__main__:app"
 Homepage = "https://github.com/yevheniidehtiar/hyper-admin"
 Repository = "https://github.com/yevheniidehtiar/hyper-admin"
 Documentation = "https://yevheniidehtiar.github.io/hyper-admin"
-Changelog = "https://github.com/yevheniidehtiar/hyper-admin/blob/main/CHANGELOG.md"
+Changelog = "https://github.com/yevheniidehtiar/hyper-admin/releases"
 Issues = "https://github.com/yevheniidehtiar/hyper-admin/issues"
 
 [project.optional-dependencies]
 dev = [
-  "cffi>=2.0.0",
   "commitizen>=4.13.9",
   "coverage[toml]>=7.13.5",
-  "matplotlib>=3.10.8",
   "mypy>=1.19.1",
   "nodeenv>=1.10.0",
   "pip-audit>=2.10.0",
   "pip-licenses>=5.5.1",
-  "httpx>=0.23.0",
   "playwright>=1.58.0",
   "poethepoet>=0.42.1",
   "pre-commit>=4.5.1",
@@ -66,15 +62,10 @@ dev = [
   "aiosqlite>=0.22.1",
   "basedpyright>=1.30.1",
   "pytest-xdist>=3.6.1",
-  "pyzmq>=27.1.0",
   "ruff==0.15.8",
   "mkdocs>=1.6.1,<2.0",
   "mkdocs-material>=9.7.5",
   "mkdocstrings[python]>=1.0.3",
-  "mkdocs-macros-plugin>=1.5.0",
-  "mdx-include>=1.4.1",
-  "mkdocs-redirects>=1.2.1",
-  "griffe-typingdoc>=0.3.1",
   "pyyaml>=6.0.3",
   "setuptools>=82.0.1",
   "numpy>=2.4.3; python_version >= '3.12'",
@@ -119,7 +110,7 @@ pythonVersion = "3.10"
 reportAny = false  # Too much noise for now
 
 [tool.pytest.ini_options]  # https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
-addopts = "--color=yes --doctest-modules --exitfirst --failed-first --verbosity=2 --junitxml=reports/pytest.xml --cov=src --cov-report=term-missing --cov-report=xml:reports/coverage.xml"
+addopts = "--color=yes --doctest-modules --exitfirst --failed-first --verbosity=2 --junitxml=reports/pytest.xml --cov=src --cov-report=term-missing --cov-report=xml"
 testpaths = ["tests"]
 xfail_strict = true
 filterwarnings = "ignore:The `name` is not the first parameter anymore:DeprecationWarning"
@@ -173,7 +164,6 @@ select = [
 ]
 ignore = [
   "E501",    # line too long (handled by formatter)
-  "G010",    # logging.warn deprecated
   "PGH003",  # blanket type: ignore
   "RET504",  # unnecessary variable before return
   "S307",    # eval usage (used intentionally)
@@ -246,8 +236,6 @@ known-first-party = ["hyperadmin"]
 [tool.ruff.lint.pycodestyle]
 max-doc-length = 100
 
-[tool.ruff.lint.pydocstyle]
-convention = "numpy"
 
 [tool.ruff.lint.pylint]
 max-args = 7
@@ -310,7 +298,7 @@ type = "simple"
   [tool.poe.tasks."test:unit"]
   help = "Run unit tests with pytests"
   sequence = [
-    { cmd = "pytest -vv -q tests/unit" },
+    { cmd = "pytest tests/unit" },
   ]
   [tool.poe.tasks."test:e2e"]
   help = "Run end-to-end tests with Playwright"

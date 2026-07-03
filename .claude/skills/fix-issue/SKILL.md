@@ -37,7 +37,8 @@ uv sync --all-extras
 
 ### 5. E2E test (if UI is involved)
 - Write/update Playwright test in `tests/e2e/`
-- Use `ha-*` CSS selectors (see `.claude/rules/testing.md`)
+- Use accessibility-first locators: `get_by_role` > `get_by_label` > `get_by_text` > `get_by_test_id`
+- `ha-*` CSS classes are for styling only — never use them in test selectors (see `.claude/rules/testing.md`)
 - `just test-e2e` to verify
 
 ### 6. Pre-submission checks
