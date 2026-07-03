@@ -18,6 +18,7 @@ pip install hyperadmin
 
 ```python
 from fastapi import FastAPI
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import SQLModel, Field
 from hyperadmin import Admin
 from hyperadmin.core.registry import site
@@ -27,6 +28,7 @@ class Product(SQLModel, table=True):
     name: str
     price: float
 
+engine = create_async_engine("sqlite+aiosqlite:///app.db")
 app = FastAPI()
 admin = Admin(app, engine=engine)
 site.register(Product)
