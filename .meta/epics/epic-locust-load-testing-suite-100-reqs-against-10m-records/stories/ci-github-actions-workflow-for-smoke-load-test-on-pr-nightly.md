@@ -2,7 +2,7 @@
 type: story
 id: 8W8i05r1Ib_j
 title: "ci: GitHub Actions workflow for smoke load test on PR + nightly full run"
-status: todo
+status: done
 priority: medium
 assignee: null
 labels:
@@ -22,7 +22,7 @@ github:
   last_sync_hash: sha256:0df23bb60c662894f8798c783e04a9da16b6371bdd125feff05e4fca0038f657
   synced_at: 2026-04-07T17:23:23.791Z
 created_at: 2026-03-27T01:08:54Z
-updated_at: 2026-03-27T01:08:54Z
+updated_at: 2026-06-03T00:00:00Z
 ---
 
 ## Context

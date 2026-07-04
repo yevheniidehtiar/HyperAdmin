@@ -2,7 +2,7 @@
 type: story
 id: FsqJ6esFI3nY
 title: "feat(loadtest): auth session mixin for Locust (login + cookie reuse)"
-status: todo
+status: done
 priority: medium
 assignee: null
 labels:
@@ -20,7 +20,7 @@ github:
   last_sync_hash: sha256:96137533c5b41f260ea40ba1a1892333bdf31a5a7fee3d7fc897fe3769188ceb
   synced_at: 2026-04-07T17:23:23.790Z
 created_at: 2026-03-27T01:08:14Z
-updated_at: 2026-03-27T01:08:14Z
+updated_at: 2026-06-03T00:00:00Z
 ---
 
 ## Context

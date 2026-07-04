@@ -2,7 +2,7 @@
 type: epic
 id: EtcJSgkScBXc
 title: "epic: Locust Load Testing Suite (100 req/s against 10M+ records)"
-status: todo
+status: done
 priority: medium
 owner: null
 labels:
@@ -17,7 +17,7 @@ github:
   last_sync_hash: sha256:fd437c291b6dc38f0752580c4c34891411fd618a7301707e010a704394e7c6f3
   synced_at: 2026-04-07T17:23:23.790Z
 created_at: 2026-03-27T01:05:12Z
-updated_at: 2026-03-27T01:10:01Z
+updated_at: 2026-06-03T00:00:00Z
 ---
 
 ## Overview

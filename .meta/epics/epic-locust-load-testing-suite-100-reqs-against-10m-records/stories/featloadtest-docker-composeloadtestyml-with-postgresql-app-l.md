@@ -2,7 +2,7 @@
 type: story
 id: xPDyOCDzSTYV
 title: "feat(loadtest): docker-compose.loadtest.yml with PostgreSQL + app + Locust"
-status: todo
+status: done
 priority: medium
 assignee: null
 labels:
@@ -21,7 +21,7 @@ github:
   last_sync_hash: sha256:efdab36e6db4a5e539dd11c20df301ebdf2f166050f4151d493ace49a7e6a7ca
   synced_at: 2026-04-07T17:23:23.790Z
 created_at: 2026-03-27T01:08:11Z
-updated_at: 2026-03-27T01:08:11Z
+updated_at: 2026-06-03T00:00:00Z
 ---
 
 ## Context

@@ -79,6 +79,11 @@ dev = [
   "setuptools>=82.0.1",
   "numpy>=2.4.3; python_version >= '3.12'",
 ]
+loadtest = [
+  "locust>=2.29",
+  "rich>=14.0",
+  "asyncpg>=0.29",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/hyperadmin"]

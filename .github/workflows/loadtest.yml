@@ -1,0 +1,139 @@
+name: Load Test
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "src/hyperadmin/adapters/**"
+      - "src/hyperadmin/views/**"
+      - "src/hyperadmin/core/**"
+      - "examples/erp/loadtest/**"
+      - ".github/workflows/loadtest.yml"
+  schedule:
+    - cron: "0 3 * * *"  # nightly full run at 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # Fast SQLite smoke test on PRs that touch the hot query paths. Must finish in < 2 min.
+  smoke:
+    name: Smoke (SQLite, 10 users, 30s)
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --all-extras
+
+      - name: Start ERP app (SQLite) and seed 1K rows
+        env:
+          HYPERADMIN_SECRET_KEY: loadtest-ci
+        run: |
+          rm -f erp.db
+          uv run uvicorn examples.erp.main:app --host 127.0.0.1 --port 8000 > app.log 2>&1 &
+          echo $! > app.pid
+          # Wait for the lifespan (schema + admin + demo seed) to finish.
+          for _ in $(seq 1 60); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/admin/login || true)
+            [ "$code" = "200" ] && break
+            sleep 2
+          done
+          # Top up to ~1K rows for representative pagination/search behaviour.
+          uv run hyperadmin seed --count 1000 \
+            --database-url "sqlite:///erp.db" --no-progress || true
+
+      - name: Run Locust (headless)
+        env:
+          LOADTEST_USER: admin
+          LOADTEST_PASSWORD: admin
+          LOADTEST_MAX_ID: "80"
+        run: |
+          uv run locust -f examples/erp/loadtest/locustfile.py \
+            --host http://127.0.0.1:8000 \
+            --headless --users 10 --spawn-rate 5 --run-time 30s \
+            --csv loadtest --html loadtest-report.html --only-summary
+
+      - name: Compare against baseline
+        run: |
+          uv run python -m examples.erp.loadtest.baselines \
+            --stats loadtest_stats.csv \
+            --baseline examples/erp/loadtest/baselines/smoke-sqlite.json
+
+      - name: Stop app
+        if: always()
+        run: kill "$(cat app.pid)" 2>/dev/null || true
+
+      - name: Upload Locust report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: locust-smoke-report
+          path: |
+            loadtest-report.html
+            loadtest_stats.csv
+            app.log
+
+  # Heavy nightly run against PostgreSQL via docker-compose: 100K rows, 100 users, 5 min.
+  nightly:
+    name: Nightly (PostgreSQL, 100 users, 5m)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --all-extras
+
+      - name: Bring up PostgreSQL + app
+        run: |
+          docker compose -f docker-compose.loadtest.yml up -d --build postgres app
+          for _ in $(seq 1 60); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/admin/login || true)
+            [ "$code" = "200" ] && break
+            sleep 5
+          done
+
+      - name: Seed 100K rows into PostgreSQL
+        run: |
+          docker compose -f docker-compose.loadtest.yml exec -T app \
+            uv run hyperadmin seed --count 100000 \
+            --database-url postgresql://hyperadmin:hyperadmin@postgres:5432/erp --no-progress
+
+      - name: Run Locust (headless, 100 users, 5m)
+        env:
+          LOADTEST_USER: admin
+          LOADTEST_PASSWORD: admin
+          LOADTEST_MAX_ID: "5000"
+        run: |
+          uv run locust -f examples/erp/loadtest/locustfile.py \
+            --host http://127.0.0.1:8000 \
+            --headless --users 100 --spawn-rate 20 --run-time 5m \
+            --csv loadtest --html loadtest-report.html --only-summary
+
+      - name: Compare against baseline
+        run: |
+          uv run python -m examples.erp.loadtest.baselines \
+            --stats loadtest_stats.csv \
+            --baseline examples/erp/loadtest/baselines/nightly-postgres.json
+
+      - name: Tear down
+        if: always()
+        run: docker compose -f docker-compose.loadtest.yml down -v
+
+      - name: Upload Locust report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: locust-nightly-report
+          path: |
+            loadtest-report.html
+            loadtest_stats.csv

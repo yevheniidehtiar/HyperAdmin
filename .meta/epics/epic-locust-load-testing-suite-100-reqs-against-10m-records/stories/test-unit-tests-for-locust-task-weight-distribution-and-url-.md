@@ -2,7 +2,7 @@
 type: story
 id: JvgiA6TzVyQF
 title: "test: unit tests for Locust task weight distribution and URL generation"
-status: todo
+status: done
 priority: medium
 assignee: null
 labels:
@@ -20,7 +20,7 @@ github:
   last_sync_hash: sha256:9a6f19a219de20cbb71449a89f17acd510650bb86ae22ca5c7955ba35e66b71c
   synced_at: 2026-04-07T17:23:23.791Z
 created_at: 2026-03-27T01:08:22Z
-updated_at: 2026-03-29T18:26:03Z
+updated_at: 2026-06-03T00:00:00Z
 ---
 
 ## Context

@@ -2,7 +2,7 @@
 type: story
 id: AgV6kfY36YXw
 title: "feat(loadtest): baseline recording and regression comparison script"
-status: todo
+status: done
 priority: medium
 assignee: null
 labels:
@@ -20,7 +20,7 @@ github:
   last_sync_hash: sha256:35157b2d0fce1b6c64283c7efd9a00e9b00c8279af5019b2afd07feeb897652d
   synced_at: 2026-04-07T17:23:23.791Z
 created_at: 2026-03-27T01:08:44Z
-updated_at: 2026-03-27T01:08:44Z
+updated_at: 2026-06-03T00:00:00Z
 ---
 
 ## Context

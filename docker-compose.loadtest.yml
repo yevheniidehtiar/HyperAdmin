@@ -1,0 +1,112 @@
+# Full load-testing stack: PostgreSQL + ERP app (3 workers) + Locust master/worker.
+#
+#   docker compose -f docker-compose.loadtest.yml up --build
+#   docker compose -f docker-compose.loadtest.yml up --scale locust-worker=3   # more workers
+#
+# Then drive the run from the Locust web UI at http://localhost:8089, or seed bulk data first:
+#   docker compose -f docker-compose.loadtest.yml exec app \
+#     uv run hyperadmin seed --count 100000 --database-url "$DATABASE_URL" --no-progress
+name: hyperadmin-loadtest
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: hyperadmin
+      POSTGRES_PASSWORD: hyperadmin
+      POSTGRES_DB: erp
+    # Tuned for a benchmark box: bigger shared_buffers/work_mem, more connections.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=256MB
+      - -c
+      - work_mem=16MB
+      - -c
+      - max_connections=200
+      - -c
+      - effective_cache_size=1GB
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hyperadmin -d erp"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: examples/erp/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://hyperadmin:hyperadmin@postgres:5432/erp
+      HYPERADMIN_SECRET_KEY: loadtest-secret-key
+    # 3 uvicorn workers. The app lifespan creates tables + the admin/admin superuser and seeds
+    # the demo dataset on startup; load bulk data afterwards via `hyperadmin seed` (see header).
+    command:
+      - uv
+      - run
+      - uvicorn
+      - examples.erp.main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --workers
+      - "3"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/admin/login').status==200 else 1)\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  locust-master:
+    build:
+      context: .
+      dockerfile: examples/erp/Dockerfile
+    command:
+      - uv
+      - run
+      - locust
+      - -f
+      - examples/erp/loadtest/locustfile.py
+      - --master
+      - --host
+      - http://app:8000
+    environment:
+      LOADTEST_USER: admin
+      LOADTEST_PASSWORD: admin
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "8089:8089"  # Locust web UI
+
+  locust-worker:
+    build:
+      context: .
+      dockerfile: examples/erp/Dockerfile
+    command:
+      - uv
+      - run
+      - locust
+      - -f
+      - examples/erp/loadtest/locustfile.py
+      - --worker
+      - --master-host
+      - locust-master
+    environment:
+      LOADTEST_USER: admin
+      LOADTEST_PASSWORD: admin
+    depends_on:
+      - locust-master
+
+volumes:
+  pgdata:

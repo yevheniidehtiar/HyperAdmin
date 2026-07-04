@@ -2,7 +2,7 @@
 type: story
 id: YSdgUJFtZdSe
 title: "feat(loadtest): update ERP Dockerfile for PostgreSQL + DATABASE_URL"
-status: todo
+status: done
 priority: medium
 assignee: null
 labels:
@@ -20,7 +20,7 @@ github:
   last_sync_hash: sha256:d70434c4ce126569854cb32c50a94872b8a644f3fd2f417184517829f7837711
   synced_at: 2026-04-07T17:23:23.791Z
 created_at: 2026-03-27T01:08:47Z
-updated_at: 2026-03-29T18:26:01Z
+updated_at: 2026-06-03T00:00:00Z
 ---
 
 ## Context

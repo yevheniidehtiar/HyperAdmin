@@ -2,7 +2,7 @@
 type: story
 id: lDFpzNYxpor-
 title: "feat(loadtest): Locust user class for CRUD write operations"
-status: todo
+status: done
 priority: medium
 assignee: null
 labels:
@@ -20,7 +20,7 @@ github:
   last_sync_hash: sha256:7e4f9c17f6f8a39416126d7470a224efe663ce8c2113f9e30dd271489597f7fe
   synced_at: 2026-04-07T17:23:23.791Z
 created_at: 2026-03-27T01:08:40Z
-updated_at: 2026-03-27T01:08:40Z
+updated_at: 2026-06-03T00:00:00Z
 ---
 
 ## Context
