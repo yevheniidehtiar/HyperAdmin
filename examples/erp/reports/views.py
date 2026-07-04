@@ -8,7 +8,6 @@ from sqlmodel import select
 
 from examples.erp.accounting.models import Account, AccountType, JournalEntry, JournalLine
 from examples.erp.db import engine
-from hyperadmin import Admin
 
 router = APIRouter()
 
@@ -85,7 +84,7 @@ async def profit_loss_report(
     if year is None:
         year = datetime.datetime.now(tz=datetime.timezone.utc).date().year
 
-    admin: Admin = request.app.state.admin
+    admin = request.app.state.admin
     pl_data = await _get_pl_data(year)
     report_url = str(request.url_for("profit_loss_report"))
 

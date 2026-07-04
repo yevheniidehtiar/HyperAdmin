@@ -39,8 +39,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install uv
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-        shell: bash
+        uses: astral-sh/setup-uv@v6
 
       - name: Install dependencies
         run: uv sync --all-extras --python ${{ matrix.python-version}} --resolution ${{ matrix.resolution }}
@@ -68,7 +67,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - python-version: "3.12"
+          - python-version: "3.13"
             resolution: "highest"
           - python-version: "3.10"
             resolution: "lowest-direct"
@@ -87,8 +86,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install uv
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-        shell: bash
+        uses: astral-sh/setup-uv@v6
 
       - name: Install dependencies
         run: uv sync --all-extras --python ${{ matrix.python-version}} --resolution ${{ matrix.resolution }}
@@ -101,3 +99,11 @@ jobs:
 
       - name: Security checks
         run: uv run poe security-check
+
+      - name: Install Playwright browsers
+        if: matrix.python-version == '3.13' && matrix.resolution == 'highest'
+        run: uv run playwright install --with-deps chromium
+
+      - name: E2E Test package
+        if: matrix.python-version == '3.13' && matrix.resolution == 'highest'
+        run: uv run poe test:e2e
