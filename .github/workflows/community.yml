@@ -20,7 +20,7 @@ jobs:
     if: github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Triage External Signal
         if: false # TODO: Enable after setting up ANTHROPIC_API_KEY
         uses: anthropics/claude-code-action@v1
