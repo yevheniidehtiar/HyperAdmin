@@ -3,11 +3,11 @@ from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from sqlmodel import Field, SQLModel
 
+from hyperadmin import Admin
 from hyperadmin.core.model import ModelAdmin
 from hyperadmin.core.registry import site
 from hyperadmin.core.settings import HyperAdminSettings
 from hyperadmin.db import create_db_and_tables
-from hyperadmin.main import Admin
 
 
 # 1. Define a SQLAlchemy model

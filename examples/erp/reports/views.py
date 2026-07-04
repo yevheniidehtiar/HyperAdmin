@@ -8,7 +8,7 @@ from sqlmodel import select
 
 from examples.erp.accounting.models import Account, AccountType, JournalEntry, JournalLine
 from examples.erp.db import engine
-from hyperadmin.main import Admin
+from hyperadmin import Admin
 
 router = APIRouter()
 

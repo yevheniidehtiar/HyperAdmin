@@ -1,8 +1,9 @@
 from unittest.mock import MagicMock
 
 import pytest
-from src.hyperadmin.adapters.registry import AdapterNotFoundError, AdapterRegistry
-from src.hyperadmin.core.adapters import BaseAdapter
+
+from hyperadmin.adapters.registry import AdapterNotFoundError, AdapterRegistry
+from hyperadmin.core.adapters import BaseAdapter
 
 
 def test_register_and_find_adapter():

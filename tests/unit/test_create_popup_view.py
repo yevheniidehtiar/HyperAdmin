@@ -15,11 +15,11 @@ from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import Field, SQLModel
 
+from hyperadmin import Admin
 from hyperadmin.adapters.sqlmodel import SQLModelAdapter
 from hyperadmin.core.model import ModelAdmin
 from hyperadmin.core.registry import site
 from hyperadmin.core.settings import HyperAdminSettings
-from hyperadmin.main import Admin
 
 
 class Supplier(SQLModel, table=True):
@@ -141,6 +141,18 @@ def test_popup_post_without_target_returns_400(client: TestClient):
 # ---------------------------------------------------------------------------
 
 
+def _iter_all_routes(routes):
+    """Recursively yield all APIRoute objects, including those nested in _IncludedRouter."""
+    for route in routes:
+        yield route
+        original_router = getattr(route, "original_router", None)
+        if original_router:
+            yield from _iter_all_routes(getattr(original_router, "routes", []))
+        sub_routes = getattr(route, "routes", None)
+        if sub_routes:
+            yield from _iter_all_routes(sub_routes)
+
+
 def test_popup_post_invokes_permission_check_with_add_codename(client: TestClient):
     """The view must call ``_check_permission(request, "add")`` before creating."""
     calls: list[str] = []
@@ -150,7 +162,7 @@ def test_popup_post_invokes_permission_check_with_add_codename(client: TestClien
             calls.append(codename)
             return codename.startswith("add_")
 
-    for route in client.app.router.routes:
+    for route in _iter_all_routes(client.app.router.routes):
         endpoint = getattr(route, "endpoint", None)
         view = getattr(endpoint, "__self__", None) if endpoint else None
         if view is not None and hasattr(view, "permission_checker"):

@@ -7,8 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlmodel import SQLModel, select
 
 from examples.simple.models import City, Country, User, upload_storage
+from hyperadmin import Admin
 from hyperadmin.core.settings import HyperAdminSettings
-from hyperadmin.main import Admin
 
 # 1. Create a database engine
 DB_URL = (

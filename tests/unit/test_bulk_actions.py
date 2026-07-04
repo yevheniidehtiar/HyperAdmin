@@ -15,6 +15,7 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import Field, SQLModel
 
+from hyperadmin import Admin
 from hyperadmin.adapters.sqlmodel import SQLModelAdapter
 from hyperadmin.core.actions import action
 from hyperadmin.core.auth import DefaultObjectPermissionChecker
@@ -23,7 +24,6 @@ from hyperadmin.core.model import ModelAdmin
 from hyperadmin.core.options import AdminOptions
 from hyperadmin.core.registry import site
 from hyperadmin.core.settings import HyperAdminSettings
-from hyperadmin.main import Admin
 
 
 class BulkWidget(SQLModel, table=True):
