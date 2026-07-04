@@ -54,3 +54,5 @@ adapter_registry.register(MyModel, MyAdapter)
 ::: hyperadmin.core.adapters.BaseAdapter
 
 ::: hyperadmin.adapters.sqlmodel.SQLModelAdapter
+
+::: hyperadmin.adapters.sqlalchemy.SQLAlchemyAdapter

@@ -67,19 +67,21 @@ pip install "git+https://github.com/yevheniidehtiar/hyper-admin.git"
 
 ```python
 from fastapi import FastAPI
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import SQLModel, Field
-from hyperadmin.admin import Admin
-from hyperadmin.views import ModelView
+from hyperadmin import Admin
+from hyperadmin.core.registry import site
 
 class Product(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     name: str
     price: float
 
+engine = create_async_engine("sqlite+aiosqlite:///app.db")
 app = FastAPI()
-admin = Admin()
-admin.register_model(ModelView(Product))
-admin.mount_to(app)          # full CRUD admin now live at /admin
+admin = Admin(app, engine=engine)
+site.register(Product)
+admin.mount("/admin")        # full CRUD admin now live at /admin
 ```
 
 Prefer to click around first? **[Open the demo in Codespaces](https://codespaces.new/yevheniidehtiar/hyper-admin?devcontainer_path=.devcontainer%2Fdevcontainer.json)** or browse the [screenshot tour](https://yevheniidehtiar.github.io/hyper-admin/demo/).

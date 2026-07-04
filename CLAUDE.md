@@ -28,7 +28,7 @@ All planning, issue creation, and implementation in this project follows three j
 
 ---
 
-# Hook-First Planning Instructions
+# Commands
 
 ```bash
 poe lint              # Run all linters (pre-commit hooks: ruff, mypy, commitizen)
@@ -66,7 +66,12 @@ This command:
 
 ## Branch and Commit Conventions
 
-These instructions apply to both `AGENTS.md` and `CLAUDE.md`.
+See [`.claude/rules/git-workflow.md`](.claude/rules/git-workflow.md) for commit message format,
+commit authorship, and PR creation conventions.
+
+---
+
+# Hook-First Planning Instructions
 
 ## Hook-First Rule
 
@@ -86,40 +91,6 @@ When the user enters a plan-style request, the assistant must treat the
 hook result as input that is processed before producing the plan.
 
 If hook rules are present:
-
-### E2E Selector Convention
-
-E2E tests use Playwright's accessibility-first locators. Query priority (highest to lowest):
-
-1. `page.get_by_role()` — buttons, links, headings, rows
-2. `page.get_by_label()` — form inputs (matched via `<label for>`)
-3. `page.get_by_text()` — static content assertions
-4. `page.get_by_test_id()` — elements without a natural accessible role
-
-**Do NOT** use `page.locator('.ha-*')` or positional DOM selectors in E2E tests. `ha-*` classes are for styling only and must not appear in test selectors.
-
-#### `data-testid` reference
-
-| Template element | `data-testid` |
-|-----------------|---------------|
-| Sidebar `<aside>` | `sidebar` |
-| List table | `list-table` |
-| Each table row | `list-row` |
-| View action link | `row-view-link` |
-| Edit action link | `row-edit-link` |
-| Delete action button | `row-delete-btn` |
-| Search input | `search-input` |
-| Pagination info | `pagination-info` |
-| Pagination previous | `pagination-prev` |
-| Pagination next | `pagination-next` |
-| Pagination current page | `pagination-page` |
-| Sort link (per field) | `sort-{field_name}` |
-| Create New link | `create-link` |
-| Form (create/update) | `model-form` |
-| Field error list | `{field_name}-errors` |
-| Detail fields container | `detail-fields` |
-
-When adding new interactive or assertable elements to templates, add a `data-testid` following the `<view>-<element>` naming pattern.
 
 1. Begin the response by explicitly naming the rules being applied.
 2. Make the plan consistent with those rules.
@@ -159,6 +130,44 @@ Do not produce planning or code output silently.
 
 Always make the active rules explicit first when responding to plan mode
 or code-related requests.
+
+---
+
+# E2E Testing Conventions
+
+## E2E Selector Convention
+
+E2E tests use Playwright's accessibility-first locators. Query priority (highest to lowest):
+
+1. `page.get_by_role()` — buttons, links, headings, rows
+2. `page.get_by_label()` — form inputs (matched via `<label for>`)
+3. `page.get_by_text()` — static content assertions
+4. `page.get_by_test_id()` — elements without a natural accessible role
+
+**Do NOT** use `page.locator('.ha-*')` or positional DOM selectors in E2E tests. `ha-*` classes are for styling only and must not appear in test selectors.
+
+### `data-testid` reference
+
+| Template element | `data-testid` |
+|-----------------|---------------|
+| Sidebar `<aside>` | `sidebar` |
+| List table | `list-table` |
+| Each table row | `list-row` |
+| View action link | `row-view-link` |
+| Edit action link | `row-edit-link` |
+| Delete action button | `row-delete-btn` |
+| Search input | `search-input` |
+| Pagination info | `pagination-info` |
+| Pagination previous | `pagination-prev` |
+| Pagination next | `pagination-next` |
+| Pagination current page | `pagination-page` |
+| Sort link (per field) | `sort-{field_name}` |
+| Create New link | `create-link` |
+| Form (create/update) | `model-form` |
+| Field error list | `{field_name}-errors` |
+| Detail fields container | `detail-fields` |
+
+When adding new interactive or assertable elements to templates, add a `data-testid` following the `<view>-<element>` naming pattern.
 
 ---
 

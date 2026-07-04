@@ -63,7 +63,7 @@ Circular imports between top-level modules are a **blocking violation**.
 |---|---|---|
 | Directory | `snake_case`, domain noun | `adapters/`, `views/`, `auth/` |
 | File | `snake_case`, named after what it implements | `sqlmodel.py`, `dynamic.py` |
-| Class | `PascalCase`, matches file concept | `SqlModelAdapter` in `sqlmodel.py` |
+| Class | `PascalCase`, matches file concept | `SQLModelAdapter` in `sqlmodel.py` |
 | Protocol/ABC | `PascalCase` + no suffix | `BaseAdapter`, not `IAdapter` or `AdapterProtocol` |
 | Private helper | `_snake_case` prefix | `_build_filter_clause` |
 

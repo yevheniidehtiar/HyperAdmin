@@ -34,24 +34,34 @@ This phase built a complete and visually appealing admin interface with full CRU
 
 - **Documentation & Community Outreach**:
     - [x] Set up a documentation site using MkDocs with the `mkdocs-material` theme.
-    - [ ] Write a "Getting Started" tutorial and document the core classes.
-    - [ ] Create a complete, runnable project in the `examples/` directory.
-    - [ ] Announce v0.2.0 on relevant platforms (GitHub Discussions, Twitter, Reddit).
+    - [x] Write a "Getting Started" tutorial and document the core classes.
+    - [x] Create a complete, runnable project in the `examples/` directory.
 
 ---
 
-## Phase 3: Advanced Features & Polish (Future)
+## Phase 3: Advanced Features & Polish (In Progress)
 
-With a solid foundation and a polished UI, this phase will focus on adding advanced features and making HyperAdmin even more powerful and flexible.
+With a solid foundation and a polished UI, this phase focuses on advanced features and making HyperAdmin more powerful and flexible.
 
-- **Advanced Features**:
-  - [ ] Authentication and authorization hooks (E2E wiring).
-  - [x] Support for model relationships (select/multiselect widgets with FK, M2M, autocomplete).
-  - [x] Custom actions (action framework with bulk and single-object actions).
-  - [ ] File uploads.
-  - [ ] Zero-config admin (3 lines of code).
-  - [ ] Internationalization (i18n).
-  - [ ] Audit / activity log.
-  - [ ] Dashboard builder.
-  - [ ] Real-time updates (WebSocket).
-  - [ ] Plugin & extension system.
+Closed milestones: **v0.2.1** (Developer Experience & Examples), **v0.3.0** (Zero-Config & Auth).
+
+- **Shipped**:
+  - [x] Zero-config admin (auto-discover all SQLModel models in 3 lines of code).
+  - [x] Authentication and authorization (login/logout, session management).
+  - [x] File upload support with local and S3-compatible storage backends.
+  - [x] Responsive design overhaul (mobile-first layout).
+  - [x] Internationalization (i18n) with `gettext`, RTL support, locale switcher.
+  - [x] Object-level permissions.
+  - [x] Multi-factor authentication (MFA / OTP).
+  - [x] Support for model relationships (FK, M2M, autocomplete).
+  - [x] Custom actions (bulk and single-object).
+
+- **Planned (open milestones)**:
+  - [ ] Multi-tenancy filtering (`get_queryset` hook) — v0.5.3
+  - [ ] Dashboard builder — v0.5.4
+  - [ ] OAuth2 / OpenID Connect SSO — v0.5.2
+  - [ ] Real-time updates (SSE / WebSocket) — v0.6.0
+  - [ ] Presence tracking — v0.6.1
+  - [ ] Scalability: cursor-based pagination, connection pool tuning — v0.7.0
+  - [ ] Plugin & extension system — v0.8.0
+  - [ ] AI-powered features — v0.8.0

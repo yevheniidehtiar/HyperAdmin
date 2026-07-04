@@ -115,6 +115,7 @@ warn_unreachable = true
 [tool.basedpyright]  # https://docs.basedpyright.com/latest/configuration/config-files/
 typeCheckingMode = "standard"
 include = ["src"]
+exclude = ["src/hyperadmin/auth/oauth"]  # WIP package; providers/tokens modules not yet merged
 pythonVersion = "3.10"
 reportAny = false  # Too much noise for now
 
@@ -292,9 +293,14 @@ type = "simple"
   # CVE-2026-4539: pygments vulnerability; pygments is a dev-only dep (rich, mkdocs-material, pytest) — not a runtime dep of this library. No fix available yet.
   # CVE-2026-25645: requests vulnerability; requests is a dev-only transitive dep (mkdocs, pip-audit, pytest-base-url). Fix: requests>=2.33.0.
   # CVE-2026-3219 / CVE-2026-6357: pip vulnerabilities in pip itself (the package manager, not a runtime dep of this library). Tracked upstream; no action required by this project.
+  # PYSEC-2026-196: pip vulnerability in pip itself (the package manager); same rationale as CVE-2026-3219/CVE-2026-6357. Tracked upstream; no action required.
+  # GHSA-6v7p-g79w-8964: msgpack vulnerability; msgpack is a dev-only transitive dep (via pyzmq) — not a runtime dep of this library. Fix: msgpack>=1.2.1 (tracked).
+  # GHSA-4xgf-cpjx-pc3j: pydantic-settings vulnerability; pydantic-settings is a dev-only transitive dep — not a runtime dep of this library. Fix: pydantic-settings>=2.14.2 (tracked).
+  # CVE-2026-53538 / CVE-2026-53539 / CVE-2026-53540: python-multipart vulnerabilities; fix in >=0.0.31 tracked in deps bump milestone.
+  # PYSEC-2026-248 / PYSEC-2026-249: starlette vulnerabilities; starlette is a transitive dep of fastapi — fix requires a fastapi bump, tracked separately.
   # --skip-editable: don't try to audit this project's own editable install (hyper-admin
   # isn't on PyPI, which otherwise aborts the audit). Third-party deps are still audited.
-  cmd = "pip-audit --skip-editable --format markdown --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln CVE-2026-4539 --ignore-vuln CVE-2026-25645 --ignore-vuln CVE-2026-3219 --ignore-vuln CVE-2026-6357"
+  cmd = "pip-audit --skip-editable --format markdown --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln CVE-2026-4539 --ignore-vuln CVE-2026-25645 --ignore-vuln CVE-2026-3219 --ignore-vuln CVE-2026-6357 --ignore-vuln PYSEC-2026-196 --ignore-vuln GHSA-6v7p-g79w-8964 --ignore-vuln GHSA-4xgf-cpjx-pc3j --ignore-vuln CVE-2026-53538 --ignore-vuln CVE-2026-53539 --ignore-vuln CVE-2026-53540 --ignore-vuln PYSEC-2026-248 --ignore-vuln PYSEC-2026-249"
 
   [tool.poe.tasks.license-check]
   help = "Check this package's dependencies for license issues"
