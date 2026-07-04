@@ -3,7 +3,7 @@ from sqlmodel import SQLModel
 
 sqlite_url = "sqlite+aiosqlite:///:memory:"
 
-engine = create_async_engine(sqlite_url, echo=True)
+engine = create_async_engine(sqlite_url, echo=False)
 
 
 async def create_db_and_tables():

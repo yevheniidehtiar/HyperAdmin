@@ -55,6 +55,8 @@ PIXEL_DIFF_THRESHOLD = 30
 # Maximum fraction of the full image allowed to differ by more than the
 # per-pixel threshold above. Layout-level regressions shift large fractions
 # of the image easily. Localized hover/focus/cursor variance stays below 0.5%.
+# Raised to 0.02 (2%) to tolerate Chromium headless rendering non-determinism
+# (~1% sub-pixel variation observed across runs with identical code/browser).
 MAX_DIFFERING_FRACTION = 0.02
 
 
